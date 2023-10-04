@@ -1,0 +1,5 @@
+Hey so to compile just run:
+javac LinkedListDriver.java
+java LinkedListDriver input.txt
+
+that should work thank you. I am going to comment the complexties and tell you the functions do in the SortedLinkedList.java file thank you.

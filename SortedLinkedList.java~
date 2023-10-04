@@ -1,0 +1,246 @@
+public class SortedLinkedList {
+    public static final int GREATER = 1;
+    public static final int EQUAL = 0;
+    public static final int LESS = -1;
+    
+    private NodeType location;
+    private NodeType predloc = null;
+    private NodeType listData;
+    private int index = 1;
+    private boolean end;
+    
+    public SortedLinkedList(){
+	listData = null;
+	location = null;
+	predloc = null;
+    }
+    public void RESET(){
+	location = null;
+	predloc = null;
+	end = false;
+	}
+    public void PRINT(){
+	location = listData;
+	while (location != null) {
+            System.out.print(location.info.getValue() + " ");
+            predloc = location;
+            location = location.next;
+        }
+        System.out.println();
+    }
+    
+    public void GETNEXT() {
+        if (isEmpty()) {
+            
+            System.out.println("The list is empty");
+           
+        }
+	if(end == false){
+        if (location == null) {
+            
+            location = listData;
+            
+        } else {
+            
+            predloc = location;
+            location = location.next;
+        }
+	
+        if (location != null) {
+            
+            System.out.println(location.info.getValue());
+        } else {
+            end = true;
+	    //System.out.println("You have reached the end of the list.");
+	    
+	    //return-1;
+        }
+    }
+	else{
+	     System.out.println("You have reached the end of the list.");
+
+	}
+    }
+    
+    public int LENGTH() {
+
+	int length = 0;
+	location = listData;
+	while (location != null){
+	    length++;
+	    location = location.next;
+	}
+	return length;
+    }
+    
+    public void INSERT(ItemType item, int flag) {
+    if (isEmpty()) {
+        NodeType newNode = new NodeType();
+        newNode.info = item;
+        newNode.next = null;
+        listData = newNode;
+        return;
+    }
+
+    NodeType location = listData;
+    NodeType predloc = null;
+    boolean found = false;
+    boolean moreToSearch = (location != null);
+    while (moreToSearch && !found) {
+        if (location.info == null) {
+      
+            break;
+        }
+
+        switch (item.compareTo(location.info)) {
+            case GREATER:
+                predloc = location;
+                location = location.next;
+                moreToSearch = (location != null);
+                break;
+            case EQUAL:
+		if(flag == 1){
+		    System.out.println("Sorry. You cannot insert the duplicate item");
+		}
+		found = true;
+		
+                break;
+            case LESS:
+                moreToSearch = false;
+                break;
+        }
+    }
+
+    if (found) {
+        return;
+    } else {
+        NodeType newNode = new NodeType();
+        newNode.info = item;
+        newNode.next = location;
+        if (predloc == null) {
+            listData = newNode;
+        } else {
+            predloc.next = newNode;
+        }
+    }
+}
+
+// Check if the list is empty
+    public boolean isEmpty() {
+	return listData == null;
+    }
+    
+    
+    public int getIndex(){
+	return index;
+    }
+    boolean SEARCH(ItemType item){
+	NodeType location = listData;
+	NodeType predloc = null;
+	boolean found = false;
+	boolean moreToSearch = (location != null);
+	index = 1;
+
+	while(moreToSearch && !found) {
+
+	    switch(item.compareTo(location.info)){
+
+	    case GREATER:
+		predloc = location;
+		location = location.next;
+		index++;
+		break;
+	    case EQUAL:
+		found = true;
+		break;
+	    case LESS:
+		moreToSearch = false;
+		break;
+	}
+
+    }
+	if(found) {
+	    int foundindex = getIndex();
+	    System.out.println("Item is present at index." + getIndex());
+	    return true;
+	}
+	else{
+	    System.out.println("number not found.");
+	    return true;
+	}
+    
+
+    }
+    public void DELETE(ItemType item) {
+    NodeType location = listData;
+    NodeType predloc = null;
+    boolean found = false;
+    while (location != null && !found) {
+        if (item.compareTo(location.info) == EQUAL) {
+            found = true;
+        } else {
+            predloc = location;
+            location = location.next;
+        }
+    }
+    if (!found) {
+        System.out.println("Error Item not found");
+    } else {
+        if (predloc == null) {
+            listData = location.next;
+        } else {
+            predloc.next = location.next;
+        }
+    }
+    }
+    public void ALTER() {
+	if (isEmpty()) {
+	    System.out.println("The list is empty.");
+	    return;
+	}
+	
+	location = listData;
+	predloc = null;
+	boolean delete = false;
+	
+	while (location != null) {
+	    if (delete) {
+		if (predloc != null) {
+		    predloc.next = location.next;
+		} else {
+		    listData = location.next;
+		}
+		delete = false;
+	    } else {
+		predloc = location;
+		delete = true;
+	    }
+	    location = location.next;
+    }
+    }
+   
+
+
+
+    public SortedLinkedList getIntersection(SortedLinkedList list2) {
+        SortedLinkedList intersectionList = new SortedLinkedList();
+        NodeType node1 = this.listData;
+        NodeType node2 = list2.listData;
+	
+        while (node1 != null && node2 != null) {
+            if (node1.info.getValue() < node2.info.getValue()) {
+                node1 = node1.next;
+            } else if (node1.info.getValue() > node2.info.getValue()) {
+                node2 = node2.next;
+            } else {
+                intersectionList.INSERT(node1.info,0);
+                node1 = node1.next;
+                node2 = node2.next;
+            }
+        }
+        return intersectionList;
+    }
+}
+
+
+
